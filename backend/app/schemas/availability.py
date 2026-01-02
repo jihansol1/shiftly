@@ -9,7 +9,7 @@ class AvailabilityCreate(BaseModel):
 
 # schema to update all availability at once. Replace existing availability with new list
 class AvailabilityUpdate(BaseModel):
-    availabilites: list[AvailabilityCreate]
+    availabilities: list[AvailabilityCreate]
 
 # schema for single availability block returned
 class AvailabilityResponse(BaseModel):
