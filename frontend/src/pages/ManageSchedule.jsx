@@ -222,24 +222,30 @@ const ManageSchedule = () => {
       {selectedView === 'schedule' && (
         <div className="schedule-view">
           <h2>Generated Schedule</h2>
+          <p className="schedule-week">Week of: {weekStartDate}</p>
+          
           {schedule.length === 0 ? (
-            <p>No schedule generated yet.</p>
+            <p>No schedule generated yet. Go to "Generate Schedule" tab to create one.</p>
           ) : (
             <div className="schedule-list">
-              {DAYS.map((day, dayIndex) => {
-                const dayShifts = schedule.filter((s) => {
-                  const shiftDate = new Date(s.shift_date);
-                  return shiftDate.getDay() === (dayIndex + 1) % 7;
-                });
+              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day, dayIndex) => {
+                // Calculate the date for this day
+                const dayDate = new Date(weekStartDate);
+                dayDate.setDate(dayDate.getDate() + dayIndex);
+                const dayDateStr = dayDate.toISOString().split('T')[0];
+                
+                // Filter shifts for this day
+                const dayShifts = schedule.filter((s) => s.shift_date === dayDateStr);
                 
                 return (
                   <div key={dayIndex} className="schedule-day">
                     <h3>{day}</h3>
+                    <p className="schedule-date">{dayDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                     {dayShifts.length === 0 ? (
                       <p className="no-shifts">No shifts</p>
                     ) : (
-                      dayShifts.map((shift) => (
-                        <div key={shift.id} className="shift-item">
+                      dayShifts.map((shift, idx) => (
+                        <div key={shift.id || idx} className="shift-item">
                           <span className="shift-time">
                             {shift.start_time} - {shift.end_time}
                           </span>
@@ -254,6 +260,12 @@ const ManageSchedule = () => {
               })}
             </div>
           )}
+          
+          {/* Debug: Show raw schedule data */}
+          <details className="debug-section">
+            <summary>Debug: Raw Schedule Data</summary>
+            <pre>{JSON.stringify(schedule, null, 2)}</pre>
+          </details>
         </div>
       )}
     </div>
