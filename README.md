@@ -105,7 +105,7 @@ shiftly/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/shiftly.git
+git clone https://github.com/jihansol1/shiftly.git
 cd shiftly
 ```
 
